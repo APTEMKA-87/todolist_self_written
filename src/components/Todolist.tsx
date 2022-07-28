@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FilterType} from "../App";
 
 type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
@@ -10,11 +10,25 @@ type TaskType = {
 type TodolistType = {
     title: string
     tasks: TaskType[]
-    removeTask: (id: number) => void
+    removeTask: (id: string) => void
     changeFilteredTasks: (value: FilterType) => void
+    addTask: (title: string) => void
 }
 
 export const Todolist = (props: TodolistType) => {
+
+    const onAllClickYandler = () => {
+        props.changeFilteredTasks('all')
+    }
+    const onActiveClickYandler = () => {
+        props.changeFilteredTasks('active')
+    }
+    const onCompltedClickYandler = () => {
+        props.changeFilteredTasks('completed')
+    }
+
+    const [newTaskTitle, setNewTaskTitle] = useState('')
+
     return (
         <div>
 
@@ -23,11 +37,30 @@ export const Todolist = (props: TodolistType) => {
             </div>
 
             <div>
+                <input value={newTaskTitle}
+                       onChange={(e) => {
+                           setNewTaskTitle(e.currentTarget.value)
+                       }}
+                       onKeyUp={(e) => {
+                           if (e.key === 'Enter') {
+                               props.addTask(newTaskTitle)
+                           }
+                       }}
+                ></input>
+                <button onClick={() => {
+                    props.addTask(newTaskTitle)
+                }}>+
+                </button>
+            </div>
+
+            <div>
                 <ul>
-                    {props.tasks.map(t => <li><input type="checkbox"
-                                                     checked={t.isDone}/>
+                    {props.tasks.map(t => <li>
+                        <input type="checkbox"
+                               checked={t.isDone}/>
                         <span>{t.title}</span>
-                        <button onClick={() => { props.removeTask(t.id)
+                        <button onClick={() => {
+                            props.removeTask(t.id)
                         }}>x
                         </button>
                     </li>)}
@@ -36,9 +69,9 @@ export const Todolist = (props: TodolistType) => {
             </div>
 
             <div>
-                <button onClick={()=>{props.changeFilteredTasks('all')}}>all</button>
-                <button onClick={()=>{props.changeFilteredTasks('active')}}>active</button>
-                <button onClick={()=>{props.changeFilteredTasks('completed')}}>completed</button>
+                <button onClick={onAllClickYandler}>all</button>
+                <button onClick={onActiveClickYandler}>active</button>
+                <button onClick={onCompltedClickYandler}>completed</button>
             </div>
 
 
