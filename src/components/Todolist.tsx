@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {FilterType} from "../App";
 
 type TaskType = {
@@ -17,64 +17,73 @@ type TodolistType = {
 
 export const Todolist = (props: TodolistType) => {
 
-    const onAllClickYandler = () => {
-        props.changeFilteredTasks('all')
+        const onAllClickYandler = () => {
+            props.changeFilteredTasks('all')
+        }
+        const onActiveClickYandler = () => {
+            props.changeFilteredTasks('active')
+        }
+        const onCompltedClickYandler = () => {
+            props.changeFilteredTasks('completed')
+        }
+        const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+            setNewTaskTitle(e.currentTarget.value)
+        }
+        const onKeyUpHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === 'Enter') {
+                props.addTask(newTaskTitle)
+            }
+        }
+        const onClickAddTaskHandler = () => {
+            props.addTask(newTaskTitle)
+        }
+
+        const [newTaskTitle, setNewTaskTitle] = useState('')
+
+        return (
+            <div>
+
+                <div>
+                    {props.title}
+                </div>
+
+                <div>
+                    <input value={newTaskTitle}
+                           onChange={onChangeInputHandler}
+                           onKeyUp={onKeyUpHandler}
+                    ></input>
+                    <button onClick={onClickAddTaskHandler}>+
+                    </button>
+                </div>
+
+                <div>
+                    <ul>
+                        {props.tasks.map(t => {
+
+                            const onClickRemoveTaskHandler = () => {
+                                props.removeTask(t.id)
+                            }
+
+                            return <li>
+                                <input type="checkbox"
+                                       checked={t.isDone}/>
+                                <span>{t.title}</span>
+                                <button onClick={onClickRemoveTaskHandler}>x
+                                </button>
+                            </li>
+                        })}
+
+                    </ul>
+                </div>
+
+                <div>
+                    <button onClick={onAllClickYandler}>all</button>
+                    <button onClick={onActiveClickYandler}>active</button>
+                    <button onClick={onCompltedClickYandler}>completed</button>
+                </div>
+
+
+            </div>
+        );
     }
-    const onActiveClickYandler = () => {
-        props.changeFilteredTasks('active')
-    }
-    const onCompltedClickYandler = () => {
-        props.changeFilteredTasks('completed')
-    }
-
-    const [newTaskTitle, setNewTaskTitle] = useState('')
-
-    return (
-        <div>
-
-            <div>
-                {props.title}
-            </div>
-
-            <div>
-                <input value={newTaskTitle}
-                       onChange={(e) => {
-                           setNewTaskTitle(e.currentTarget.value)
-                       }}
-                       onKeyUp={(e) => {
-                           if (e.key === 'Enter') {
-                               props.addTask(newTaskTitle)
-                           }
-                       }}
-                ></input>
-                <button onClick={() => {
-                    props.addTask(newTaskTitle)
-                }}>+
-                </button>
-            </div>
-
-            <div>
-                <ul>
-                    {props.tasks.map(t => <li>
-                        <input type="checkbox"
-                               checked={t.isDone}/>
-                        <span>{t.title}</span>
-                        <button onClick={() => {
-                            props.removeTask(t.id)
-                        }}>x
-                        </button>
-                    </li>)}
-
-                </ul>
-            </div>
-
-            <div>
-                <button onClick={onAllClickYandler}>all</button>
-                <button onClick={onActiveClickYandler}>active</button>
-                <button onClick={onCompltedClickYandler}>completed</button>
-            </div>
-
-
-        </div>
-    );
-};
+;
