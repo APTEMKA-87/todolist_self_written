@@ -10,8 +10,8 @@ type TaskType = {
 type TodolistType = {
     title: string
     tasks: TaskType[]
-    removeTasks: (taskId: number) => void
-    changeFilter: (value: FilterType) => void
+    removeTask: (id: number) => void
+    changeFilteredTasks: (value: FilterType) => void
 }
 
 export const Todolist = (props: TodolistType) => {
@@ -19,28 +19,28 @@ export const Todolist = (props: TodolistType) => {
         <div>
 
             <div>
-                <span>{props.title}</span>
-                <button>+</button>
+                {props.title}
             </div>
 
             <div>
                 <ul>
-                    {props.tasks.map(t => <li>
-                        <input type={"checkbox"}
-                               checked={t.isDone}/>{t.title}
-                        <button onClick={() => {
-                            props.removeTasks(t.id)
+                    {props.tasks.map(t => <li><input type="checkbox"
+                                                     checked={t.isDone}/>
+                        <span>{t.title}</span>
+                        <button onClick={() => { props.removeTask(t.id)
                         }}>x
                         </button>
                     </li>)}
+
                 </ul>
             </div>
 
             <div>
-                <button onClick={()=> {props.changeFilter("all")}}>all</button>
-                <button onClick={()=> {props.changeFilter("active")}}>active</button>
-                <button onClick={()=> {props.changeFilter("completed")}}>completed</button>
+                <button onClick={()=>{props.changeFilteredTasks('all')}}>all</button>
+                <button onClick={()=>{props.changeFilteredTasks('active')}}>active</button>
+                <button onClick={()=>{props.changeFilteredTasks('completed')}}>completed</button>
             </div>
+
 
         </div>
     );

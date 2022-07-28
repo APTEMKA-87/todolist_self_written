@@ -3,10 +3,9 @@ import './App.css';
 import {Todolist} from "./components/Todolist";
 
 
-export type FilterType = 'all'|'active'| 'completed'
+export type FilterType = 'all' | 'active' | 'completed'
 
 function App() {
-
 
     let [tasks, setTasks] = useState([
         {id: 1, title: 'JS', isDone: true},
@@ -16,24 +15,24 @@ function App() {
         {id: 5, title: 'CSS', isDone: false},
     ])
 
-    const removeTasks = (id: number) => {
+    const removeTask = (id: number) => {
         let filteredTasks = tasks.filter(t => t.id != id)
         setTasks(filteredTasks)
     }
 
     let [filter, setFilter] = useState<FilterType>('all')
 
-    let tasksForTodoList = tasks
+    let taskForTodoList = tasks
 
     if (filter === 'active') {
-        tasksForTodoList = tasks.filter(t => t.isDone === false)
+        taskForTodoList = tasks.filter(t => t.isDone === false)
     }
 
     if (filter === 'completed') {
-        tasksForTodoList = tasks.filter(t => t.isDone === true)
+        taskForTodoList = tasks.filter(t => t.isDone === true)
     }
 
-    const changeFilter = (value:FilterType) => {
+    const changeFilteredTasks = (value: FilterType) => {
         setFilter(value)
     }
 
@@ -41,9 +40,9 @@ function App() {
         <div className="App">
             <Todolist
                 title='What to learn'
-                tasks={tasksForTodoList}
-                removeTasks={removeTasks}
-                changeFilter={changeFilter}
+                tasks={taskForTodoList}
+                removeTask={removeTask}
+                changeFilteredTasks={changeFilteredTasks}
             />
         </div>
     );
